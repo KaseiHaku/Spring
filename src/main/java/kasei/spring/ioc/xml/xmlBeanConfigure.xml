@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/context
+		    http://www.springframework.org/schema/context/spring-context.xsd  
+		    http://www.springframework.org/schema/beans  
+		    http://www.springframework.org/schema/beans/spring-beans.xsd
+		    http://www.springframework.org/schema/util  
+		    http://www.springframework.org/schema/util/spring-util.xsd">
+	
+	<!-- 如果需要测试，请把该文件拷贝到 src 目录下，在包内无法访问 -->
+	
+	<!-- 配置独立的集合bean，以供多个bean共同使用 ，需要导入 util 命名空间-->
+    <util:list id="objs">
+    	<ref bean="obj1"></ref>
+    	<ref bean="obj2"></ref>
+    	<ref bean="obj3"></ref>
+    </util:list>
+	
+		
+	<!-- ###### 属性注入方法3：通过p命名空间为bean属性赋值，需要先导入p命名空间 ########### -->
+	<bean id="obj1" class="kasei.spring.ioc.xml.Obj" p:name="obj1"></bean>
+	<bean id="obj2" class="kasei.spring.ioc.xml.Obj" p:name="obj2"></bean>
+	<bean id="obj3" class="kasei.spring.ioc.xml.Obj" p:name="obj3"></bean>
+	
+	
+	<!-- ###### 属性注入方法1：set方法注入 ##################################### -->
+	<bean id="b01Set" class="kasei.spring.ioc.xml.B01Set" scope="prototype" init-method="init4" destroy-method="destroy">
+		<property name="i" value="22"></property>
+		<property name="d" value="3.14"></property>
+		<property name="str" value="Kasei"></property>
+		<property name="objA" ref="obj1"></property>
+		<property name="objA.name" value="obj:级联属性注入"></property>
+		<property name="objB">
+			<bean class="kasei.spring.ioc.xml.Obj" p:name="obj：内部bean"></bean>
+		</property>
+		<property name="listA">
+			<list>
+				<ref bean="obj1"/>
+				<ref bean="obj2"/>
+				<ref bean="obj3"/>
+			</list>
+		</property>
+		<property name="listA" ref="objs"></property>
+		<property name="map">
+			<map>
+    			<entry key="AA" value-ref="obj1"></entry>
+    			<entry key="BB" value-ref="obj2"></entry>
+    			<entry key="CC" value-ref="obj3"></entry>
+    		</map>
+		</property>
+		<property name="properties">
+			<props>
+    			<prop key="user">root</prop>
+    			<prop key="password">1234</prop>
+    			<prop key="jdbcUrl">jdbc:mysql:///test</prop>
+    			<prop key="driverClass">com.mysql.jdbc.Driver</prop>
+    		</props>
+		</property>
+	</bean>
+	
+	
+	<!-- ###### 属性注入方法2：构造方法注入 ##################################### -->
+	<bean id="b02Constructor" class="kasei.spring.ioc.xml.B02Constructor">
+		<constructor-arg index="3" ><null/></constructor-arg>
+		<constructor-arg index="0" value="1"></constructor-arg>
+		<constructor-arg index="2" ><value><![CDATA[obj: <Nissan^>]]></value></constructor-arg>
+		<constructor-arg index="1" type="double" value="3"><null/></constructor-arg>
+	</bean>
+
+
+	<!-- ###### 属性注入方法4：Autowire ##################################### -->
+	<!-- 自动装配：
+		autowire="byName" -> 根据当前 bean 的 setAbc() 方法，寻找当前容器中 bean id="abc" 的 bean 装配到该 bean 的属性中
+		autowire="byType" -> 根据当前 bean 的 setAbc() 方法 set 的类型，寻找当前容器中同类型的 bean 并装配，如果有多个同类型的 bean 则报错
+	 -->
+	<bean id="b03Autowire" class="kasei.spring.ioc.xml.B03Autowire" autowire="byName"></bean>
+	
+	
+	<!-- ###### 属性注入方法5：Inherit autowire 属性不能继承 ###################################### -->
+	<!-- 若一个 bean 没有 class 属， 则该 bean 必须为抽象bean -->	
+	<bean id="abstractBean" p:name="obj:Inherit" abstract="true"></bean>
+	<bean id="obj4" class="kasei.spring.ioc.xml.Obj"></bean>
+	
+	
+	<!-- ###### 属性注入方法6：外部属性文件注入 ###################################### -->
+	<context:property-placeholder location="classpath:db.properties"/>
+	<bean id="b04ExternalFile" class="kasei.spring.ioc.xml.B04ExternalFile">
+		<!-- 使用外部属性文件的属性 --> 
+		<property name="user" value="${user}"></property>
+		<property name="password" value="${password}"></property>
+		<property name="driverClass" value="${driverClass}"></property>
+		<property name="jdbcUrl" value="${jdbcUrl}"></property>
+	</bean>
+	
+	
+	<!-- ###### 属性注入方法7：SpEL ###################################### -->
+	<!-- SpEL
+		逻辑运算符：and, or, not
+		if-else: ()?():()
+		正则：matches -->
+	<bean id="spELDemo" class="kasei.spring.ioc.xml.SpELDemo"></bean>
+	<bean id="b05SpEL" class="kasei.spring.ioc.xml.B05SpEL">
+		<property name="str" value="#{'字面量'}"></property>
+		<!-- 使用SpEL 引用其他bean的字段 -->
+		<property name="spELDemo_name" value="#{spELDemo.name}"></property>
+		<!-- 使用SpEL 引用其他bean的方法 -->
+		<property name="spELDemo_name2" value="#{spELDemo.getName()}"></property>
+		<!-- 使用SpEL 调用静态方法和属性 -->
+		<property name="spELDemo_fun" value="#{T(kasei.spring.ioc.xml.SpELDemo).staticVar+'  '+ T(kasei.spring.ioc.xml.SpELDemo).staticFun()}"></property>
+		<!-- 使用SpEL 引用其他bean -->
+		<property name="spELDemo" value="#{spELDemo}"></property>
+		<!-- 使用SpEL if-else -->
+		<property name="ifelse" value="#{60 > 70 ? '大在前' : '大在后'}"></property>
+	</bean>
+	
+	
+	<!-- ###### 属性注入方法8：静态工厂方法来配置 bean ###################################### -->
+	<bean id="obj7" class="kasei.spring.ioc.xml.Obj" factory-method="getObj">
+		<constructor-arg value="obj7"></constructor-arg><!-- 是给factory-method 方法传参数 -->
+	</bean>
+	
+	
+	<!-- ###### 属性注入方法8：实例工厂配置 bean  ###################################### -->
+	<bean id="b07InstanceFactory" class="kasei.spring.ioc.xml.B07InstanceFactory"></bean>
+	<bean id="obj9" factory-bean="carInstanceFactory" factory-method="getObj">
+		<constructor-arg value="obj9"></constructor-arg>
+	</bean>
+	
+	
+	<!-- ###### 属性注入方法8：FactoryBean 配置bean  ###################################### -->
+	<!-- 通过FactoryBean 配置bean：实现FactoryBean 接口 
+		class:指向 FactoryBean 的全类名
+		property：配置 FactoryBean 的属性
+		但实际返回的是 FactoryBean 的  getObject() 方法返回的实例！-->	
+	<bean id="obj11" class="kasei.spring.ioc.xml.B08FactoryBean">
+		<property name="name" value="看到就发"></property>
+	</bean> 
+	
+	<!-- ###### bean之间的依赖关系  ###################################### -->
+	<!-- depends-on="obj1,obj2" -> 表示在配置该 bean 的时候，当前容器中必须要存在
+			 bean id="obj1" 和 "obj2" 这两个 bean ，否则报错 -->	
+	<bean id="obj5" class="kasei.spring.ioc.xml.Obj" 
+			p:name="obj: bean's dependence" depends-on="obj1,obj2"></bean>
+	
+	
+	
+	<!-- ###### 配置 bean 的后置处理器  ###################################### -->
+	<!-- 配置 bean 的后置处理器 :不需要id  IOC容器自动识别
+		实现 BeanPostProcessor 接口，并实现其中的抽象方法-->
+	<bean class="k01DependenceInject.K12BeansPostpositionProcessor"></bean>
+	
+</beans>
