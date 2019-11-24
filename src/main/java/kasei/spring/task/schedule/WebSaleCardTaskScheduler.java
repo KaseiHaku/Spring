@@ -1,7 +1,6 @@
 package kasei.spring.task.schedule;
 
-import com.skeyedu.advisory.dal.dao.SystemParameterDao;
-import com.skeyedu.advisory.dal.model.SystemParameter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
