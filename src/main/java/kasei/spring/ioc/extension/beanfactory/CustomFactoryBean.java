@@ -1,4 +1,4 @@
-package kasei.spring.ioc.extension;
+package kasei.spring.ioc.extension.beanfactory;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.stereotype.Component;

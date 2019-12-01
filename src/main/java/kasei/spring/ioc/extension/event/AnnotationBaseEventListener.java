@@ -1,4 +1,4 @@
-package kasei.spring.ioc.event;
+package kasei.spring.ioc.extension.event;
 
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.event.*;
