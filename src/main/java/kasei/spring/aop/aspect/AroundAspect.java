@@ -1,4 +1,4 @@
-package kasei.spring.aop.b02anno;
+package kasei.spring.aop.aspect;
 
 import java.util.Arrays;
 
@@ -17,7 +17,7 @@ public class AroundAspect {
 	 * 环绕通知类似于动态代理的全过程：ProceedingJoinPoin 类型的参数可以决定是否执行目标方法
 	 * 且环绕通知必须有返回值，返回值即为目标方法的返回值
 	 * */
-	@Around("execution(public int a04aop.b01imp.*.*(..))")
+	@Around("execution(public int kasei.spring.aop.*.*(..))")
 	public Object aroundMethod(ProceedingJoinPoint pjd){
 		Object result = null;
 		String className = pjd.getTarget().getClass().getName();

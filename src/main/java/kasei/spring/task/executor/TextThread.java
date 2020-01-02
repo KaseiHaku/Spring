@@ -12,7 +12,7 @@ public class TextThread {
         while (true) {
             System.out.println("测试1："+i++);
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -26,7 +26,7 @@ public class TextThread {
         while (true) {
             System.out.println("发送：" + i++);
             try {
-                Thread.sleep(300);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

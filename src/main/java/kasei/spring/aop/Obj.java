@@ -1,6 +1,6 @@
 package kasei.spring.aop;
 
-interface Obj {
+public interface Obj {
 	
 	int add(int i, int j);
 	int sub(int i, int j);

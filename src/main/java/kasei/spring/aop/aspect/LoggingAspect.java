@@ -1,4 +1,4 @@
-package kasei.spring.aop.b02anno;
+package kasei.spring.aop.aspect;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoggingAspect {
 
-	@Before("execution(public int a04aop.b01imp.ObjImp.add(int, int))")
+	@Before("execution(public int kasei.spring.aop.ObjImp.add(int, int))")
 	/* 声明该方法在目标方法开始执行之前执行 */
 	public void beforeMethod(JoinPoint joinPoint) {
 		
@@ -35,13 +35,13 @@ public class LoggingAspect {
 	 * 使用@Pointcut 来声明切入点表达式
 	 * 后面的其他通知直接使用方法名来引用当前的切入点
 	 * */
-	@Pointcut("execution(public int a04aop.b01imp.ObjImp.*(int, ..))")
+	@Pointcut("execution(public int kasei.spring.aop.ObjImp.*(int, ..))")
 	public void myJoinPointExpression(){}
 	
 	
 	//后置通知：在目标方法执行后（无论是否发生异常），执行通知
 	//在后置通知中不能访问目标方法的执行结果	
-	@After("a04aop.b01imp.LoggingAspect.myJoinPointExpression()") // 使用切入点表达式
+	@After("kasei.spring.aop.aspect.LoggingAspect.myJoinPointExpression()") // 使用切入点表达式
 	public void afterMethod(JoinPoint joinPoint) {		
 		String methodName = joinPoint.getSignature().getName();		
 		System.out.println("@After: " + methodName + " -> 执行完成");
@@ -50,7 +50,7 @@ public class LoggingAspect {
 	/* 在方法正常结束时，所执行的代码
 	 * 返回通知是可以访问方法的返回值的
 	 * */
-	@AfterReturning(value="execution(public * a04aop.b01imp.*.*(int, ..))",
+	@AfterReturning(value="execution(public * kasei.spring.aop.*.*(int, ..))",
 					returning="result")
 	public void afterReturning(JoinPoint joinPoint, Object result){
 		String methodName = joinPoint.getSignature().getName();
@@ -61,7 +61,7 @@ public class LoggingAspect {
 	/* 在目标方法出现 Exception 异常时会执行的代码
 	 * 可以访问到异常对象；
 	 * */
-	@AfterThrowing(value="execution(public double a04aop.b01imp.*.*(int, ..))",
+	@AfterThrowing(value="execution(public double kasei.spring.aop.*.*(int, ..))",
 			throwing="ex")
 	public void afterThrowing(JoinPoint joinPoint, Exception ex){
 		String methodName = joinPoint.getSignature().getName();

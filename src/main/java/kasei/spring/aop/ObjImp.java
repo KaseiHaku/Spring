@@ -1,5 +1,8 @@
 package kasei.spring.aop;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class ObjImp implements Obj{
 
 	@Override

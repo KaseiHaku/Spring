@@ -1,15 +1,13 @@
 package kasei.spring.task.schedule;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
 public class WebSaleCardTaskScheduler {
 
-
-
+    public String gg = "132";
 
     /** cron 表达式格式：Seconds Minutes Hours DayofMonth Month DayofWeek [Year] 年可以不写
      * 每一个域可出现的字符如下：
@@ -34,9 +32,8 @@ public class WebSaleCardTaskScheduler {
 
 
     /** todo 每日 0 时重置 系统参数 005 的值为 0 */
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0/5 * * * * ?")
     public void setZero2SystemParameter0005(){
-
         System.out.println("定时任务");
     }
 

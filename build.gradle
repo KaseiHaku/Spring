@@ -14,18 +14,24 @@ repositories {
 
 ext {
     Author = "KaseiHaku"
-    SpringVersion = '5.2.0.RELEASE'
+    SpringVersion = '5.2.2.RELEASE'
 }
 
 dependencies {
 
+    testCompile group: 'org.springframework', name: 'spring-test', version: "${SpringVersion}"
 
     compile group: 'org.springframework', name: 'spring-core', version: "${SpringVersion}"
     compile group: 'org.springframework', name: 'spring-context', version: "${SpringVersion}"
     compile group: 'org.springframework', name: 'spring-beans', version: "${SpringVersion}"
+
+
+    /** TODO AOP 依赖的包 */
+    compile group: 'aopalliance', name: 'aopalliance', version: '1.0'
+    compile group: 'org.aspectj', name: 'aspectjrt', version: '1.9.5'
+    runtime group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.5'
     compile group: 'org.springframework', name: 'spring-aop', version: "${SpringVersion}"
-
-
-    testCompile group: 'org.springframework', name: 'spring-test', version: "${SpringVersion}"
+    compile group: 'org.springframework', name: 'spring-aspects', version: '5.2.2.RELEASE'
+    
 
 }
