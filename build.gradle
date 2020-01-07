@@ -13,25 +13,42 @@ repositories {
 }
 
 ext {
-    Author = "KaseiHaku"
+    Author = 'KaseiHaku'
+    JunitVersion = '5.5.2'
     SpringVersion = '5.2.2.RELEASE'
 }
 
 dependencies {
 
-    testCompile group: 'org.springframework', name: 'spring-test', version: "${SpringVersion}"
+    /** todo Gradle 支持的依赖方式
+     * compileOnly — for dependencies that are necessary to compile your production code but shouldn’t be part of the runtime classpath
+     * implementation (supersedes compile) — used for compilation and runtime
+     * runtimeOnly (supersedes runtime) — only used at runtime, not for compilation
+     * testCompileOnly — same as compileOnly except it’s for the tests
+     * testImplementation — test equivalent of implementation
+     * testRuntimeOnly — test equivalent of runtimeOnly
+     * */
 
-    compile group: 'org.springframework', name: 'spring-core', version: "${SpringVersion}"
-    compile group: 'org.springframework', name: 'spring-context', version: "${SpringVersion}"
-    compile group: 'org.springframework', name: 'spring-beans', version: "${SpringVersion}"
+    /** TODO Test */
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.5.2'
+    testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.5.2'
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.5.2'
+    testImplementation group: 'org.springframework', name: 'spring-test', version: "${SpringVersion}"
+    testImplementation group: 'org.springframework', name: 'spring-mock', version: '2.0.8'
+
+
+    /** TODO Spring */
+    implementation group: 'org.springframework', name: 'spring-core', version: "${SpringVersion}"
+    implementation group: 'org.springframework', name: 'spring-context', version: "${SpringVersion}"
+    implementation group: 'org.springframework', name: 'spring-beans', version: "${SpringVersion}"
 
 
     /** TODO AOP 依赖的包 */
-    compile group: 'aopalliance', name: 'aopalliance', version: '1.0'
-    compile group: 'org.aspectj', name: 'aspectjrt', version: '1.9.5'
-    runtime group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.5'
-    compile group: 'org.springframework', name: 'spring-aop', version: "${SpringVersion}"
-    compile group: 'org.springframework', name: 'spring-aspects', version: '5.2.2.RELEASE'
+    implementation group: 'aopalliance', name: 'aopalliance', version: '1.0'
+    implementation group: 'org.aspectj', name: 'aspectjrt', version: '1.9.5'
+    runtimeOnly group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.5'
+    implementation group: 'org.springframework', name: 'spring-aop', version: "${SpringVersion}"
+    implementation group: 'org.springframework', name: 'spring-aspects', version: '5.2.2.RELEASE'
     
 
 }
