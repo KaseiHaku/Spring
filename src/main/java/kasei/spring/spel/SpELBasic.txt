@@ -1,3 +1,11 @@
+ExpressionParser: 表示是一个 SpEL 表达式的解析器
+EvaluationContext: SpEL 表达式解析时使用的上下文环境
+
+
+
+
+
+
 /**
  * #{'hello world'}     String
  * #{null}              null
@@ -19,4 +27,3 @@
  *      or
  *      not
  * */
-package kasei.spring.spel;

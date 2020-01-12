@@ -1,7 +1,13 @@
 package kasei.spring.ioc.config;
 
+import kasei.spring.data.convert.CustomPropertyEditorRegistrar;
+import kasei.spring.data.convert.Telephone;
+import kasei.spring.data.convert.TelephonePropertyEditor;
+import kasei.spring.data.validate.single.Person;
 import kasei.spring.ioc.javabase.JavaBaseBean;
+import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.CustomEditorConfigurer;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.core.task.TaskExecutor;
@@ -10,6 +16,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+
+import java.util.Map;
 
 @Configuration // 使用 CGLIB 创建一个子类来作为实际运行类，添加额外代码，来进行 spring 框架的定制
 @Import({SlaveSpringConfig.class}) // 导入其他配置类
@@ -39,6 +47,21 @@ public class MasterSpringConfig {
 
 
 
+    /** TODO 注册自定义类型转换器 */
+    @Bean
+    public CustomEditorConfigurer customEditorConfigurer(){
+        CustomEditorConfigurer customEditorConfigurer = new CustomEditorConfigurer();
+        customEditorConfigurer.setCustomEditors(Map.of(Telephone.class, TelephonePropertyEditor.class));
 
+        PropertyEditorRegistrar[] PropertyEditorRegistrars = {this.customPropertyEditorRegistrar()};
+        customEditorConfigurer.setPropertyEditorRegistrars(PropertyEditorRegistrars);
+        return customEditorConfigurer;
+    }
+
+    /** TODO 注册一个自定义类型转换器注册人：主要用于批量注册 PropertyEditor 到不同的场景中 */
+    @Bean
+    public CustomPropertyEditorRegistrar customPropertyEditorRegistrar(){
+        return new CustomPropertyEditorRegistrar();
+    }
 
 }

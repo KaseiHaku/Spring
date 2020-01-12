@@ -1,5 +1,8 @@
 plugins {
     id 'java'
+    id 'application'
+    id 'io.spring.dependency-management' version "1.0.8.RELEASE"
+    id "io.freefair.lombok" version "4.1.6"
     id 'idea'
 }
 
@@ -9,14 +12,38 @@ version '1.0.0'
 sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
     mavenCentral()
+    jcenter()
 }
 
-ext {
-    Author = 'KaseiHaku'
-    JunitVersion = '5.5.2'
-    SpringVersion = '5.2.2.RELEASE'
+
+/** TODO 依赖于 java 插件 ********************************************************************/
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+            exclude 'kasei/spring/transaction/**'
+        }
+    }
+
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+    }
 }
+
+/** TODO 插件 io.spring.dependency-management 的 DSL
+ * 依赖管理配置：可以让 dependencies {} 中省略版本号 
+ * */
+dependencyManagement {
+    imports {
+        mavenBom 'io.spring.platform:platform-bom:Cairo-SR8'  // 不能使用 group, name, version 的形式
+    }
+}
+
+
 
 dependencies {
 
@@ -29,26 +56,51 @@ dependencies {
      * testRuntimeOnly — test equivalent of runtimeOnly
      * */
 
+    /** TODO Convenient Develop */
+    // 自动生成 getter setter，而不用写在代码里，需要 IDEA 安装 lombok 插件，并修改 "Settings > Build > Compiler > Annotation Processors" 为 Enable
+    annotationProcessor group: 'org.projectlombok', name: 'lombok'
+
     /** TODO Test */
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.5.2'
-    testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.5.2'
-    testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.5.2'
-    testImplementation group: 'org.springframework', name: 'spring-test', version: "${SpringVersion}"
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.2'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.2'
+    testImplementation group: 'org.springframework', name: 'spring-test'
     testImplementation group: 'org.springframework', name: 'spring-mock', version: '2.0.8'
 
 
     /** TODO Spring */
-    implementation group: 'org.springframework', name: 'spring-core', version: "${SpringVersion}"
-    implementation group: 'org.springframework', name: 'spring-context', version: "${SpringVersion}"
-    implementation group: 'org.springframework', name: 'spring-beans', version: "${SpringVersion}"
+    implementation group: 'org.springframework', name: 'spring-core'
+    implementation group: 'org.springframework', name: 'spring-context'
+    implementation group: 'org.springframework', name: 'spring-beans'
 
 
     /** TODO AOP 依赖的包 */
     implementation group: 'aopalliance', name: 'aopalliance', version: '1.0'
-    implementation group: 'org.aspectj', name: 'aspectjrt', version: '1.9.5'
-    runtimeOnly group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.5'
-    implementation group: 'org.springframework', name: 'spring-aop', version: "${SpringVersion}"
-    implementation group: 'org.springframework', name: 'spring-aspects', version: '5.2.2.RELEASE'
+    implementation group: 'org.aspectj', name: 'aspectjrt'
+    runtimeOnly group: 'org.aspectj', name: 'aspectjweaver'
+    implementation group: 'org.springframework', name: 'spring-aop'
+    implementation group: 'org.springframework', name: 'spring-aspects'
     
 
 }
+
+/** TODO 依赖于 application 插件 ********************************************************************/
+mainClassName = 'kasei.spring.SpringMain'
+application {
+    applicationDefaultJvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=43567']
+}
+
+
+test {
+    testLogging {
+        // shell> gradle --debug test --tests kasei.spring.SpringTests.testMethod | grep 'TestEventLogger'
+        events 'STARTED', 'PASSED', 'SKIPPED', 'FAILED', 'STANDARD_OUT', 'STANDARD_ERROR'
+    }
+
+    useJUnitPlatform {
+        systemProperties = [
+                'junit.platform.output.capture.stdout': 'true',
+                'junit.platform.output.capture.stderr': 'true'
+        ]
+    }
+}
+

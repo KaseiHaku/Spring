@@ -1,0 +1,5 @@
+BeanWrapper:
+    作用： 让 Bean 属性的存取，可以使用 字符串 来表示，避免采用硬编码的方式 Bean 的属性进行存取
+    应用场景：
+        Spring 通过 xml 配置文件，使用 BeanFactory 创建 Bean 时
+        MVC 通过 DataBinder 将 HTTP 请求参数绑定到 Controller 的方法参数中时

@@ -3,6 +3,10 @@ package kasei.spring;
 import kasei.spring.aop.Obj;
 import kasei.spring.aop.ObjImp;
 import kasei.spring.aop.ObjProxy;
+import kasei.spring.data.bind.ChildEntity;
+import kasei.spring.data.bind.ParentEntity;
+import kasei.spring.data.convert.PersonEntity;
+import kasei.spring.data.validate.single.Person;
 import kasei.spring.ioc.config.MasterSpringConfig;
 import kasei.spring.ioc.di.*;
 import kasei.spring.ioc.AnnotationBase;
@@ -11,16 +15,30 @@ import kasei.spring.ioc.annotationbase.ControllerBean;
 import kasei.spring.ioc.annotationbase.RepositoryBean;
 import kasei.spring.ioc.annotationbase.ServiceBean;
 import kasei.spring.ioc.javabase.JavaBaseBean;
+import kasei.spring.spel.Simple;
 import kasei.spring.task.executor.TextThread;
 import kasei.spring.task.schedule.WebSaleCardTaskScheduler;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.SimpleEvaluationContext;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class SpringMain {
     public static void main(String[] args) {
+
+        try {
+            Thread.sleep(1000*4);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         ApplicationContext context = new AnnotationConfigApplicationContext(MasterSpringConfig.class);
 
 
@@ -89,8 +107,75 @@ public class SpringMain {
 
         Obj obj = (Obj) context.getBean("objImp");
         System.out.println(obj.add(6, 3)); // 测试切面 Priority
-        System.out.println(obj.div(6, 0)); // 测试 @Around 通知，先把 LoggingAspect 这个类从切面中删除
+        // System.out.println(obj.div(6, 0)); // 测试 @Around 通知，先把 LoggingAspect 这个类从切面中删除
 
+
+        // TODO Type Converter
+        System.out.println("\n================ TODO Type Converter");
+        PersonEntity personEntity = context.getBean("personEntity", PersonEntity.class);
+        System.out.println(personEntity.getTelephone());
+
+
+        // TODO Data Binding
+        System.out.println("\n================ TODO Data Binding");
+        System.out.println("\n================ TODO BeanWrapper Demo");
+        ParentEntity parentEntity = new ParentEntity();
+        parentEntity.setStr("parentEntity");
+        parentEntity.setList(List.of(1, 2));
+        parentEntity.setMap(Map.of("key1", false, "key2", true));
+
+        BeanWrapper parentWrapper = new BeanWrapperImpl(parentEntity);
+        parentWrapper.setPropertyValue("str", "parent");
+
+        BeanWrapper childWrapper = new BeanWrapperImpl(new ChildEntity());
+        childWrapper.setPropertyValue("name", "kasei");
+        parentWrapper.setPropertyValue("composed", childWrapper.getWrappedInstance());
+
+        String str = (String)parentWrapper.getPropertyValue("str");
+        Integer list = (Integer)parentWrapper.getPropertyValue("list[0]");
+        Boolean map = (Boolean)parentWrapper.getPropertyValue("map[key1]");
+        String composed = (String)parentWrapper.getPropertyValue("composed.name");
+        System.out.println(str);
+        System.out.println(list);
+        System.out.println(map);
+        System.out.println(composed);
+
+
+        // TODO Validate
+        System.out.println("\n================ TODO Validate");
+        Person person = new Person();
+        person.setName("");
+        person.setAge(123);
+        // PersonValidator personValidator = new PersonValidator();
+        // personValidator.validate(person, null);
+
+
+
+
+        // TODO BeanWrapper: 提供 Spring 访问 Bean 字段的通用方法，运行时先把上面的异常语句注释掉
+
+
+
+
+
+
+
+
+        // TODO SpEL
+        System.out.println("\n================ TODO SpEL");
+        ExpressionParser parser = new SpelExpressionParser();
+        Simple simple = new Simple();
+        simple.booleanList.add(true);
+
+        EvaluationContext spelContext = SimpleEvaluationContext.forReadOnlyDataBinding().build();
+
+        // "false" is passed in here as a String. SpEL and the conversion service
+        // will recognize that it needs to be a Boolean and convert it accordingly.
+        parser.parseExpression("booleanList[0]").setValue(spelContext, simple, "false");
+
+        // b is false
+        Boolean b = simple.booleanList.get(0);
+        System.out.println(b);
 
 
         ((AnnotationConfigApplicationContext)context).stop();
