@@ -1,4 +1,4 @@
-package kasei.spring.data.convert;
+package kasei.spring.data.convert.editor;
 
 import java.beans.PropertyEditorSupport;
 

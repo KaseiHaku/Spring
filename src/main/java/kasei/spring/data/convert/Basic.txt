@@ -21,4 +21,11 @@ java.beans.PropertyEditor
 java.beans.PropertyEditorManager
     作用： 用于配置 PropertyEditor 实现类的查找路径，
 
+Converter: 标记当前类是个转换器
+GenericConverter:
+ConditionalConverter: 标记当前 Converter 有个方法用于判断参数中的 Type 是否可以由当前 Converter 进行转换
+ConversionService:
+ConverterRegistry:
+
+Formatter: 更具体化的表示 打印和解析的过程
 

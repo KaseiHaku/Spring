@@ -5,7 +5,7 @@ import kasei.spring.aop.ObjImp;
 import kasei.spring.aop.ObjProxy;
 import kasei.spring.data.bind.ChildEntity;
 import kasei.spring.data.bind.ParentEntity;
-import kasei.spring.data.convert.PersonEntity;
+import kasei.spring.data.convert.editor.PersonEntity;
 import kasei.spring.data.validate.single.Person;
 import kasei.spring.ioc.config.MasterSpringConfig;
 import kasei.spring.ioc.di.*;
@@ -143,13 +143,8 @@ public class SpringMain {
 
         // TODO Validate
         System.out.println("\n================ TODO Validate");
-        Person person = new Person();
-        person.setName("");
-        person.setAge(123);
-        // PersonValidator personValidator = new PersonValidator();
-        // personValidator.validate(person, null);
-
-
+        Person person = context.getBean("person", Person.class);
+        System.out.println(person.getAge());
 
 
         // TODO BeanWrapper: 提供 Spring 访问 Bean 字段的通用方法，运行时先把上面的异常语句注释掉

@@ -1,21 +1,17 @@
 package kasei.spring.ioc.config;
 
-import kasei.spring.data.convert.CustomPropertyEditorRegistrar;
-import kasei.spring.data.convert.Telephone;
-import kasei.spring.data.convert.TelephonePropertyEditor;
-import kasei.spring.data.validate.single.Person;
+import kasei.spring.data.convert.editor.CustomPropertyEditorRegistrar;
+import kasei.spring.data.convert.editor.Telephone;
+import kasei.spring.data.convert.editor.TelephonePropertyEditor;
 import kasei.spring.ioc.javabase.JavaBaseBean;
 import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.CustomEditorConfigurer;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.util.Map;
 
@@ -62,6 +58,14 @@ public class MasterSpringConfig {
     @Bean
     public CustomPropertyEditorRegistrar customPropertyEditorRegistrar(){
         return new CustomPropertyEditorRegistrar();
+    }
+
+
+    /** TODO 配置 Spring validator */
+    @Bean
+    public LocalValidatorFactoryBean validator(){
+        LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+        return localValidatorFactoryBean;
     }
 
 }
