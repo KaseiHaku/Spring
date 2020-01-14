@@ -1,4 +1,4 @@
-package kasei.spring.data.convert.editor;
+package kasei.spring.data.bean.convert;
 
 import lombok.*;
 

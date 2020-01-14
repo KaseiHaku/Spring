@@ -1,4 +1,4 @@
-package kasei.spring.data.convert.converter;
+package kasei.spring.data.bean.validate;
 
 public enum Color {
     GREEN, RED, YELLOW, BLUE;

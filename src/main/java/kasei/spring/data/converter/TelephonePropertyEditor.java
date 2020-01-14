@@ -1,4 +1,6 @@
-package kasei.spring.data.convert.editor;
+package kasei.spring.data.converter;
+
+import kasei.spring.data.bean.convert.Telephone;
 
 import java.beans.PropertyEditorSupport;
 

@@ -1,4 +1,4 @@
-package kasei.spring.data.validate.complex;
+package kasei.spring.data.bean.validate;
 
 import lombok.Data;
 

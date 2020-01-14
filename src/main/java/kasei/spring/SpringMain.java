@@ -3,17 +3,16 @@ package kasei.spring;
 import kasei.spring.aop.Obj;
 import kasei.spring.aop.ObjImp;
 import kasei.spring.aop.ObjProxy;
-import kasei.spring.data.bind.ChildEntity;
-import kasei.spring.data.bind.ParentEntity;
-import kasei.spring.data.convert.editor.PersonEntity;
-import kasei.spring.data.validate.single.Person;
-import kasei.spring.ioc.config.MasterSpringConfig;
-import kasei.spring.ioc.di.*;
+import kasei.spring.data.bean.bind.ChildEntity;
+import kasei.spring.data.bean.bind.ParentEntity;
+import kasei.spring.data.bean.convert.PersonEntity;
 import kasei.spring.ioc.AnnotationBase;
 import kasei.spring.ioc.annotationbase.ComponentBean;
 import kasei.spring.ioc.annotationbase.ControllerBean;
 import kasei.spring.ioc.annotationbase.RepositoryBean;
 import kasei.spring.ioc.annotationbase.ServiceBean;
+import kasei.spring.ioc.config.MasterSpringConfig;
+import kasei.spring.ioc.di.*;
 import kasei.spring.ioc.javabase.JavaBaseBean;
 import kasei.spring.spel.Simple;
 import kasei.spring.task.executor.TextThread;
@@ -35,7 +34,7 @@ public class SpringMain {
     public static void main(String[] args) {
 
         try {
-            Thread.sleep(1000*4);
+            Thread.sleep(1000*1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -60,6 +59,12 @@ public class SpringMain {
 
         ComponentBean customNamedComponentBean = context.getBean("customNamedComponentBean", ComponentBean.class);
         System.out.println(customNamedComponentBean.getName());
+
+        // TODO Show All Beans in IOC Container
+        System.out.println("\n================ TODO Show All Beans in IOC Container");
+        context.getBeansOfType(Object.class, true, true).forEach((k,v) -> {
+            System.out.format("%100s\t%s%n", k, v.getClass().getTypeName());
+        });
 
         // TODO Dependency Injection Demo
         System.out.println("\n================ TODO Dependency Injection Demo");
@@ -118,7 +123,6 @@ public class SpringMain {
 
         // TODO Data Binding
         System.out.println("\n================ TODO Data Binding");
-        System.out.println("\n================ TODO BeanWrapper Demo");
         ParentEntity parentEntity = new ParentEntity();
         parentEntity.setStr("parentEntity");
         parentEntity.setList(List.of(1, 2));
@@ -141,10 +145,12 @@ public class SpringMain {
         System.out.println(composed);
 
 
+
+
+
         // TODO Validate
         System.out.println("\n================ TODO Validate");
-        Person person = context.getBean("person", Person.class);
-        System.out.println(person.getAge());
+
 
 
         // TODO BeanWrapper: 提供 Spring 访问 Bean 字段的通用方法，运行时先把上面的异常语句注释掉
@@ -161,14 +167,8 @@ public class SpringMain {
         ExpressionParser parser = new SpelExpressionParser();
         Simple simple = new Simple();
         simple.booleanList.add(true);
-
         EvaluationContext spelContext = SimpleEvaluationContext.forReadOnlyDataBinding().build();
-
-        // "false" is passed in here as a String. SpEL and the conversion service
-        // will recognize that it needs to be a Boolean and convert it accordingly.
         parser.parseExpression("booleanList[0]").setValue(spelContext, simple, "false");
-
-        // b is false
         Boolean b = simple.booleanList.get(0);
         System.out.println(b);
 

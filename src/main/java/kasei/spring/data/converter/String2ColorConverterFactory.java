@@ -1,5 +1,6 @@
-package kasei.spring.data.convert.converter;
+package kasei.spring.data.converter;
 
+import kasei.spring.data.bean.validate.Color;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 
@@ -7,7 +8,7 @@ import org.springframework.core.convert.converter.ConverterFactory;
 public class String2ColorConverterFactory implements ConverterFactory<String, Color> {
     @Override
     public <T extends Color> Converter<String, T> getConverter(Class<T> targetType) {
-        return new String2ColorConverter(targetType);
+        return null;
     }
 
     private final class Str2ColorConverter<T extends Color> implements Converter<String, T>{
@@ -20,8 +21,8 @@ public class String2ColorConverterFactory implements ConverterFactory<String, Co
 
         @Override
         public T convert(String source) {
-            Color c = Color.valueOf(this.colorType, source);
-            return ;
+            // Color c = Color.valueOf(this.colorType, source);
+            return null;
         }
     }
 }

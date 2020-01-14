@@ -1,6 +1,6 @@
-package kasei.spring.data.validate.single;
+package kasei.spring.data.validator;
 
-import kasei.spring.data.validate.single.Person;
+import kasei.spring.data.bean.validate.Person;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;

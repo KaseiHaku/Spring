@@ -1,4 +1,4 @@
-package kasei.spring.data.convert.converter;
+package kasei.spring.data.converter;
 
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.ConditionalConverter;

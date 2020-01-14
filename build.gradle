@@ -58,7 +58,8 @@ dependencies {
 
     /** TODO Convenient Develop */
     // 自动生成 getter setter，而不用写在代码里，需要 IDEA 安装 lombok 插件，并修改 "Settings > Build > Compiler > Annotation Processors" 为 Enable
-    annotationProcessor group: 'org.projectlombok', name: 'lombok'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.10'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.10'
 
     /** TODO Test */
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.2'
@@ -71,7 +72,11 @@ dependencies {
     implementation group: 'org.springframework', name: 'spring-core'
     implementation group: 'org.springframework', name: 'spring-context'
     implementation group: 'org.springframework', name: 'spring-beans'
+
+    /** TODO Validate  */
     implementation group: 'org.hibernate.validator', name: 'hibernate-validator'
+    implementation group: 'javax.el', name: 'javax.el-api'
+    implementation group: 'org.glassfish', name: 'javax.el'
 
 
     /** TODO AOP 依赖的包 */
@@ -80,6 +85,9 @@ dependencies {
     runtimeOnly group: 'org.aspectj', name: 'aspectjweaver'
     implementation group: 'org.springframework', name: 'spring-aop'
     implementation group: 'org.springframework', name: 'spring-aspects'
+
+
+    implementation group: 'org.apache.commons', name: 'commons-lang3'
     
 
 }

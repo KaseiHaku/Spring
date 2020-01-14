@@ -1,5 +1,7 @@
-package kasei.spring.data.validate.complex;
+package kasei.spring.data.validator;
 
+import kasei.spring.data.bean.validate.Address;
+import kasei.spring.data.bean.validate.Customer;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;

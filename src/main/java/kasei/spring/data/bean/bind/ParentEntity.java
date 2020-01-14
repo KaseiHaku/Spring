@@ -1,4 +1,4 @@
-package kasei.spring.data.bind;
+package kasei.spring.data.bean.bind;
 
 import lombok.Data;
 

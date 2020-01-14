@@ -1,3 +1,76 @@
+先转换 -> 再绑定 -> 最后校验
+
+转换器：
+    java.beans.PropertyEditor
+        作用： 将 String 转换成指定的类型的 Object
+
+        应用场景：
+            1. Spring 将 xml 里面配置的 String 类型值 转换成 实际需要的类型的实例，例如：kasei.spring.Go 字符串 转换成 内存中实际的 Class 实例
+            2. MVC 中将 HTTP request parameters 转换成 Controller 类对应的方法参数
+
+        注册方式：
+            1. sun.bean.editors: 包含 Font, Color, Enum, 基本类型 的 PropertyEditor 实现类
+            2. 同包下，以 Editor 结尾的类名，会被当作 PropertyEditor 搜索，例如 SomethingEditor 会被当作同包下的 Something 类的 editor 被注册
+            3. 同包下，以 BeanInfo 结尾的类名，会被调用，以注册一个或多个 PropertyEditor
+            4. Spring 默认提供的 PropertyEditor 都在 org.springframework.beans.propertyeditors 包下，由 BeanWrapperImpl 注册
+            5. 手动注册：
+                1. 如果能获取到 Spring ConfigurableBeanFactory 的引用，那么可以调用 registerCustomEditor() 进行注册
+                2. 使用 CustomEditorConfigurer 类，该类实现了 BeanFactoryPostProcessor 所以 Spring 会在自动调用
+                    1. 直接调用该类的 setCustomEditors() 方法注册 PropertyEditor
+                    2. 先使用 PropertyEditorRegistrar 这个接口将 多个 PropertyEditor 打包后
+                       再调用该类的 setPropertyEditorRegistrars() 方法，一次性注册多个 PropertyEditor
+        缺点：
+            1. 只能将 String 转成 Object
 
 
-PropertyEditorRegistrar
+    Converter:
+        作用： 将一个确定的类型转换成另一个确定类型
+
+        注册方式：
+            Spring 自动检测容器中 ConversionRegistry 类型的 Bean ，并调用该 Bean 的方法完成类型转换
+
+    ConverterFactory:
+        作用： 通过泛型方法，一次定义多个 Converter
+
+    GenericConverter:
+        作用： 复杂类型的转换
+
+    Formatter:
+        作用： 将 String 转换成 Object ，跟 PropertyEditor 类似，主要用于 Web 层
+        注册方式：
+            1. 使用 FormatterRegistry SPI 注册
+            2. FormatterRegistrar 批量注册
+
+
+绑定器：
+    BeanWrapper:
+        作用： 让 Bean 属性的存取，可以使用 字符串 来表示，避免采用硬编码的方式 Bean 的属性进行存取
+            应用场景：
+                Spring 通过 xml 配置文件，使用 BeanFactory 创建 Bean 时
+                MVC 通过 DataBinder 将 HTTP 请求参数绑定到 Controller 的方法参数中时
+
+    DataBinder：
+    BeanFactory：
+
+
+校验器：
+    Validator:
+        作用： 配合 @Valid 或 @Validated 注解使用
+        1. 创建自定义校验注解
+        2. 为校验注解绑定校验逻辑
+        3. 创建 entity
+        4. 在 entity 字段 或者 类上打上 自定义校验注解
+        5. 新建一个调用者类，包含一个方法，该方法参数类型为 entity 类型
+        6. 在调用者类的方法参数上打上 @Valid 或者 @Validate 标记
+        7. 将 调用者 放入到 IOC 容器中
+        7. 使用 spring 调用该方法
+
+
+
+
+
+
+
+
+
+

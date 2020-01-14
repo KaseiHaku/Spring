@@ -1,8 +1,8 @@
 package kasei.spring.ioc.config;
 
 import kasei.spring.data.convert.editor.CustomPropertyEditorRegistrar;
-import kasei.spring.data.convert.editor.Telephone;
-import kasei.spring.data.convert.editor.TelephonePropertyEditor;
+import kasei.spring.data.bean.convert.Telephone;
+import kasei.spring.data.converter.TelephonePropertyEditor;
 import kasei.spring.ioc.javabase.JavaBaseBean;
 import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +65,7 @@ public class MasterSpringConfig {
     @Bean
     public LocalValidatorFactoryBean validator(){
         LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+        // localValidatorFactoryBean.
         return localValidatorFactoryBean;
     }
 
