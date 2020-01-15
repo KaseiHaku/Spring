@@ -5,7 +5,11 @@ import kasei.spring.aop.ObjImp;
 import kasei.spring.aop.ObjProxy;
 import kasei.spring.data.bean.bind.ChildEntity;
 import kasei.spring.data.bean.bind.ParentEntity;
-import kasei.spring.data.bean.convert.PersonEntity;
+import kasei.spring.data.bean.convert.Color;
+import kasei.spring.data.bean.convert.ConverterTest;
+import kasei.spring.data.bean.validate.Person;
+import kasei.spring.data.bean.validate.ValidateTest;
+import kasei.spring.data.validator.PersonValidator;
 import kasei.spring.ioc.AnnotationBase;
 import kasei.spring.ioc.annotationbase.ComponentBean;
 import kasei.spring.ioc.annotationbase.ControllerBean;
@@ -17,18 +21,18 @@ import kasei.spring.ioc.javabase.JavaBaseBean;
 import kasei.spring.spel.Simple;
 import kasei.spring.task.executor.TextThread;
 import kasei.spring.task.schedule.WebSaleCardTaskScheduler;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.SimpleEvaluationContext;
+import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.DataBinder;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class SpringMain {
     public static void main(String[] args) {
@@ -117,12 +121,15 @@ public class SpringMain {
 
         // TODO Type Converter
         System.out.println("\n================ TODO Type Converter");
-        PersonEntity personEntity = context.getBean("personEntity", PersonEntity.class);
-        System.out.println(personEntity.getTelephone());
+        ConverterTest converterTest = context.getBean("converterTest", ConverterTest.class);
+        System.out.println(converterTest.getTelephone()); // 测试 PropertyEditor
+        System.out.println(converterTest.getColor().getCurrentVal()); // 测试 Converter
+        System.out.println(converterTest.getBigDecimal()); // 测试 Formatter
 
 
         // TODO Data Binding
         System.out.println("\n================ TODO Data Binding");
+        System.out.println("\n======== BeanWrapper");
         ParentEntity parentEntity = new ParentEntity();
         parentEntity.setStr("parentEntity");
         parentEntity.setList(List.of(1, 2));
@@ -144,22 +151,37 @@ public class SpringMain {
         System.out.println(map);
         System.out.println(composed);
 
+        System.out.println("\n======== DataBinder");
+        Person bindTarget = new Person();
+        DataBinder binder = new DataBinder(bindTarget);
+        binder.setValidator(new PersonValidator());
+
+        // bind to the target object
+        List<PropertyValue> pvList = new ArrayList<>();
+        pvList.add(new PropertyValue("name", ""));
+        pvList.add(new PropertyValue("age", 122));
+        PropertyValues pvs = new MutablePropertyValues(pvList);
+        binder.bind(pvs);
+
+        // validate the target object
+        binder.validate();
+
+        // get BindingResult that includes any validation errors
+        BindingResult results = binder.getBindingResult();
+        results.getAllErrors().forEach(item -> {
+            String s = Arrays.toString(item.getCodes());
+            System.out.println(s);
+        });
+
 
 
 
 
         // TODO Validate
         System.out.println("\n================ TODO Validate");
-
-
-
-        // TODO BeanWrapper: 提供 Spring 访问 Bean 字段的通用方法，运行时先把上面的异常语句注释掉
-
-
-
-
-
-
+        ValidateTest validateTest = context.getBean("validateTest", ValidateTest.class);
+        String person = validateTest.getPerson();
+        System.out.println(person);
 
 
         // TODO SpEL

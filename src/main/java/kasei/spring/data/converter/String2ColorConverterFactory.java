@@ -1,6 +1,6 @@
 package kasei.spring.data.converter;
 
-import kasei.spring.data.bean.validate.Color;
+import kasei.spring.data.bean.convert.Color;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 

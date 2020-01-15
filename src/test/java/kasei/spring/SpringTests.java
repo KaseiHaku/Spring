@@ -1,5 +1,7 @@
 package kasei.spring;
 
+import kasei.spring.data.bean.convert.Color;
+import kasei.spring.data.converter.String2ColorConverter;
 import kasei.spring.ioc.annotationbase.ComponentBean;
 import kasei.spring.ioc.config.MasterSpringConfig;
 import org.junit.jupiter.api.*;
@@ -40,7 +42,8 @@ public class SpringTests {
 
     @Test
     void test(){
-        System.out.println(componentBean.getName());
-        throw new RuntimeException("1324");
+        String2ColorConverter converter = new String2ColorConverter();
+        Color red = converter.convert("RED");
+        System.out.println(red.getCurrentVal());
     }
 }

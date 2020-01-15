@@ -34,6 +34,11 @@ sourceSets {
     }
 }
 
+/** TODO 表明用于编译的 .java 文件的编码格式是 UTF-8 */
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
 /** TODO 插件 io.spring.dependency-management 的 DSL
  * 依赖管理配置：可以让 dependencies {} 中省略版本号 
  * */

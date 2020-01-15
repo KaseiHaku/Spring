@@ -7,19 +7,19 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 /** TODO @MyConstraint validate.txt 注解对应的校验器，逻辑实现类 */
-public class MyValidator implements ConstraintValidator<MyValidatorAnno, String> {
+public class MyConstraintValidator implements ConstraintValidator<MyConstraintValidatorAnno, String> {
 
 
     private String valueInAnnotation;
 
     @Override
-    public void initialize(MyValidatorAnno constraintAnnotation) {
-        this.valueInAnnotation = constraintAnnotation.value();
+    public void initialize(MyConstraintValidatorAnno constraintAnnotation) {
+        this.valueInAnnotation = constraintAnnotation.message();
     }
 
     @Override
     public boolean isValid(String valueBeAnnotated, ConstraintValidatorContext context) {
-        return StringUtils.containsAny(valueBeAnnotated, " ");
+        return !StringUtils.containsAny(valueBeAnnotated, " ");
     }
 
 
