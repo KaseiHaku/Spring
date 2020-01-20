@@ -91,7 +91,10 @@ dependencies {
     implementation group: 'org.springframework', name: 'spring-aop'
     implementation group: 'org.springframework', name: 'spring-aspects'
 
+    /** TODO Database */
+    implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
 
+    /** TODO Utility */
     implementation group: 'org.apache.commons', name: 'commons-lang3'
     
 
