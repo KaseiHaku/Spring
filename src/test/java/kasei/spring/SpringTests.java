@@ -1,27 +1,19 @@
 package kasei.spring;
 
-import kasei.spring.data.bean.convert.Color;
-import kasei.spring.data.converter.String2ColorConverter;
+import kasei.spring.binding.bean.convert.Color;
+import kasei.spring.binding.converter.String2ColorConverter;
 import kasei.spring.ioc.annotationbase.ComponentBean;
-import kasei.spring.ioc.config.MasterSpringConfig;
+import kasei.spring.ioc.config.MasterConfig;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.DisabledIf;
-import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
-
-import java.beans.PropertyEditor;
-import java.beans.PropertyEditorManager;
-import java.io.File;
 
 
 // jupiter 相关的 spring 注解
 @ExtendWith(SpringExtension.class)
-@SpringJUnitConfig(classes = {MasterSpringConfig.class})
+@SpringJUnitConfig(classes = {MasterConfig.class})
 @DisplayName("spring tests")
 public class SpringTests {
 

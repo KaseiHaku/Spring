@@ -3,21 +3,21 @@ package kasei.spring;
 import kasei.spring.aop.Obj;
 import kasei.spring.aop.ObjImp;
 import kasei.spring.aop.ObjProxy;
-import kasei.spring.data.bean.bind.ChildEntity;
-import kasei.spring.data.bean.bind.ParentEntity;
-import kasei.spring.data.bean.convert.Color;
-import kasei.spring.data.bean.convert.ConverterTest;
-import kasei.spring.data.bean.validate.Person;
-import kasei.spring.data.bean.validate.ValidateTest;
-import kasei.spring.data.validator.PersonValidator;
+import kasei.spring.binding.bean.bind.ChildEntity;
+import kasei.spring.binding.bean.bind.ParentEntity;
+import kasei.spring.binding.bean.convert.ConverterTest;
+import kasei.spring.binding.bean.validate.Person;
+import kasei.spring.binding.bean.validate.ValidateTest;
+import kasei.spring.binding.validator.PersonValidator;
 import kasei.spring.ioc.AnnotationBase;
 import kasei.spring.ioc.annotationbase.ComponentBean;
 import kasei.spring.ioc.annotationbase.ControllerBean;
 import kasei.spring.ioc.annotationbase.RepositoryBean;
 import kasei.spring.ioc.annotationbase.ServiceBean;
-import kasei.spring.ioc.config.MasterSpringConfig;
+import kasei.spring.ioc.config.MasterConfig;
 import kasei.spring.ioc.di.*;
 import kasei.spring.ioc.javabase.JavaBaseBean;
+import kasei.spring.mail.SpringMail;
 import kasei.spring.spel.Simple;
 import kasei.spring.task.executor.TextThread;
 import kasei.spring.task.schedule.WebSaleCardTaskScheduler;
@@ -28,10 +28,12 @@ import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.SimpleEvaluationContext;
-import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
 
+import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 public class SpringMain {
@@ -42,7 +44,7 @@ public class SpringMain {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        ApplicationContext context = new AnnotationConfigApplicationContext(MasterSpringConfig.class);
+        ApplicationContext context = new AnnotationConfigApplicationContext(MasterConfig.class);
 
 
         // TODO JavaBase Inversion of Control Demo
@@ -91,32 +93,6 @@ public class SpringMain {
 
         ValueDi valueDi = context.getBean("valueDi", ValueDi.class);
         System.out.println("autowired qualifier di value: " + valueDi.getConfigFileValue());
-
-
-
-        // TODO Schedule: Spring IOC 容器关闭会取消执行
-        System.out.println("\n================ TODO Spring Schedule Demo");
-        WebSaleCardTaskScheduler webSaleCardTaskScheduler = context.getBean("webSaleCardTaskScheduler", WebSaleCardTaskScheduler.class);
-        System.out.println(webSaleCardTaskScheduler.gg);
-
-        // TODO Async: 不受 Spring IOC 容器的影响
-        System.out.println("\n================ TODO Spring Async Demo");
-        TextThread textThread = context.getBean("textThread", TextThread.class);
-        textThread.test();  // 使用 spring 线程池执行
-        textThread.test2(); // 使用 spring 线程池执行
-
-
-        // TODO AOP
-        System.out.println("\n================ TODO Spring AOP Demo");
-        Obj target = new ObjImp();
-        Obj proxy = new ObjProxy(target).getProxy();  // JDK 原生动态代理实现
-        System.out.println(proxy.add(1, 2));
-        System.out.println(proxy.sub(3, 2));
-
-
-        Obj obj = (Obj) context.getBean("objImp");
-        System.out.println(obj.add(6, 3)); // 测试切面 Priority
-        // System.out.println(obj.div(6, 0)); // 测试 @Around 通知，先把 LoggingAspect 这个类从切面中删除
 
 
         // TODO Type Converter
@@ -174,9 +150,6 @@ public class SpringMain {
         });
 
 
-
-
-
         // TODO Validate
         System.out.println("\n================ TODO Validate");
         ValidateTest validateTest = context.getBean("validateTest", ValidateTest.class);
@@ -193,6 +166,57 @@ public class SpringMain {
         parser.parseExpression("booleanList[0]").setValue(spelContext, simple, "false");
         Boolean b = simple.booleanList.get(0);
         System.out.println(b);
+
+
+        // TODO AOP
+        System.out.println("\n================ TODO Spring AOP Demo");
+        Obj target = new ObjImp();
+        Obj proxy = new ObjProxy(target).getProxy();  // JDK 原生动态代理实现
+        System.out.println(proxy.add(1, 2));
+        System.out.println(proxy.sub(3, 2));
+
+
+        Obj obj = (Obj) context.getBean("objImp");
+        System.out.println(obj.add(6, 3)); // 测试切面 Priority
+        // System.out.println(obj.div(6, 0)); // 测试 @Around 通知，先把 LoggingAspect 这个类从切面中删除
+
+
+
+
+
+        // TODO Schedule: Spring IOC 容器关闭会取消执行
+        System.out.println("\n================ TODO Spring Schedule Demo");
+        WebSaleCardTaskScheduler webSaleCardTaskScheduler = context.getBean("webSaleCardTaskScheduler", WebSaleCardTaskScheduler.class);
+        System.out.println(webSaleCardTaskScheduler.gg);
+
+        // TODO Async: 不受 Spring IOC 容器的影响
+        System.out.println("\n================ TODO Spring Async Demo");
+        TextThread textThread = context.getBean("textThread", TextThread.class);
+        textThread.test();  // 使用 spring 线程池执行
+        textThread.test2(); // 使用 spring 线程池执行
+
+
+
+
+
+
+
+        // TODO JDBC
+        System.out.println("\n================ TODO JDBC");
+        DataSource dataSource = context.getBean("dataSource", DataSource.class);
+        try {
+            ResultSet resultSet = dataSource.getConnection().createStatement().executeQuery("select * from user");
+            while (resultSet.next()) {
+                System.out.println(resultSet.getString("account"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // TODO Mail
+        System.out.println("\n================ TODO Mail");
+        SpringMail springMail = context.getBean("springMail", SpringMail.class);
+        // springMail.sendMailWithMimeMessageHelper();
 
 
         ((AnnotationConfigApplicationContext)context).stop();

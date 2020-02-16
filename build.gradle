@@ -17,6 +17,13 @@ repositories {
     jcenter()
 }
 
+configurations {
+    
+    compile.exclude  group: 'commons-logging', module: 'commons-logging'  // 排除掉 JCL 
+    testCompile.exclude group: 'org.junit.vintage'  // 排除掉 Junit5 兼容 Junit4 的 jar 包
+    testCompile.exclude group: 'junit'  // 排除掉 Junit4 的 jar 包
+}
+
 
 /** TODO 依赖于 java 插件 ********************************************************************/
 sourceSets {
@@ -67,16 +74,20 @@ dependencies {
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.10'
 
     /** TODO Test */
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.2'
-    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.2'
     testImplementation group: 'org.springframework', name: 'spring-test'
     testImplementation group: 'org.springframework', name: 'spring-mock', version: '2.0.8'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.2'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.2'
 
+    /** TODO Utility */
+    implementation group: 'org.apache.commons', name: 'commons-lang3'
 
     /** TODO Spring */
-    implementation group: 'org.springframework', name: 'spring-core'
-    implementation group: 'org.springframework', name: 'spring-context'
-    implementation group: 'org.springframework', name: 'spring-beans'
+    implementation group: 'org.springframework', name: 'spring-core'        // 包含动态代理等通用工具类
+
+    /** TODO IOC & DI */
+    implementation group: 'org.springframework', name: 'spring-beans'       // 包含 Bean 工厂，数据绑定器，类型转换器
+    implementation group: 'org.springframework', name: 'spring-context'     // 包含 上下文容器，定时任务，异步任务
 
     /** TODO Validate  */
     implementation group: 'org.hibernate.validator', name: 'hibernate-validator'
@@ -84,18 +95,46 @@ dependencies {
     implementation group: 'org.glassfish', name: 'javax.el'
 
 
-    /** TODO AOP 依赖的包 */
+    /** TODO AOP */
+    implementation group: 'org.springframework', name: 'spring-aop'         // AOP 编程模式所依赖的包
+    implementation group: 'org.springframework', name: 'spring-aspects'     // Spring 使用 Aspectj 进行 AOP 实现时，所依赖的包
     implementation group: 'aopalliance', name: 'aopalliance', version: '1.0'
     implementation group: 'org.aspectj', name: 'aspectjrt'
     runtimeOnly group: 'org.aspectj', name: 'aspectjweaver'
-    implementation group: 'org.springframework', name: 'spring-aop'
-    implementation group: 'org.springframework', name: 'spring-aspects'
 
-    /** TODO Database */
+
+
+
+
+
+
+
+    /** TODO JDBC */
+    implementation group: 'org.springframework', name: 'spring-jdbc'        // Spring 连接关系型数据库必须的包
+    implementation group: 'org.springframework', name: 'spring-tx'          // Spring 事务管理所依赖的包
+    implementation group: 'com.zaxxer', name: 'HikariCP'
     implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
 
-    /** TODO Utility */
-    implementation group: 'org.apache.commons', name: 'commons-lang3'
+    /** TODO Log */
+    // Apache Commons Logging(JCL) 是 apache 提供的通用日志 API，和 SLF4J 类似，
+    // JCL 如果没有找到第三方日志实现，则默认使用 JDK 自带的日志实现 java.util.logging(JUL)，
+    // JCL 不能适配最新的 log4j2 和 logback 的实现
+    implementation group: 'org.slf4j', name: 'slf4j-api'
+    implementation group: 'org.slf4j', name: 'jcl-over-slf4j'   // 将 JCL 适配到 SLF4J 上，引入这个依赖要排除掉 commons-logging 依赖
+    testImplementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl'  // 将 slf4j 适配到 log4j2 上
+    
+
+    /** TODO Mail */
+    implementation group: 'org.springframework.integration', name: 'spring-integration-mail' // Spring Mail
+    implementation group: 'com.sun.mail', name: 'javax.mail'
+
+    /** TODO Template Engine */
+    implementation group: 'org.freemarker', name: 'freemarker'
+
+    /** TODO Web HTTP Client */
+    implementation group: 'org.springframework', name: 'spring-web'
+    implementation group: 'org.springframework', name: 'spring-webflux'
+    implementation group: 'io.projectreactor.netty', name: 'reactor-netty', version: '0.9.4.RELEASE'
     
 
 }
