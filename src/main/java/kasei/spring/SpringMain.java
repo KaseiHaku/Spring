@@ -219,7 +219,7 @@ public class SpringMain {
         // springMail.sendMailWithMimeMessageHelper();
 
 
-        ((AnnotationConfigApplicationContext)context).stop();
-        ((AnnotationConfigApplicationContext)context).close();
+        // ((AnnotationConfigApplicationContext)context).stop();
+        // ((AnnotationConfigApplicationContext)context).close();
     }
 }
