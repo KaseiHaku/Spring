@@ -1,5 +1,6 @@
 package kasei.spring.ioc.config;
 
+import com.sun.mail.imap.protocol.ID;
 import kasei.spring.binding.bean.convert.Telephone;
 import kasei.spring.binding.converter.BigDecimalFormatter;
 import kasei.spring.binding.converter.CustomPropertyEditorRegistrar;
@@ -35,10 +36,23 @@ import java.util.*;
 public class MasterConfig {
 
 
+    /** @Autowired
+     * 放在构造函数上：
+     *      1. 如果一个 Bean 只有一个（有参）构造函数，那么 Spring 创建 Bean 时会自动调用该构造函数，不需要使用 @Autowired 注解标记，其中的参数会使用 IOC 容器中匹配的类型
+     *      2. 有且只有一个构造函数可以使用 @Autowired(required=true) 标记
+     *      3. 如果有多个 @Autowired(required=false) 标记的构造函数，Spring 会调用，参数最多的，且参数在 IOC 容器中都能找到的构造函数，如果参数都不能全部找到，那么调用默认构造函数（无参构造器）
+     * 放在字段上：
+     *      1. 构造函数执行完之后，自动从 IOC 容器中获取并注入
+     * 放在方法上：
+     *      1. 自动从 IOC 容器中获取匹配类型的实例，注入到参数中
+     * */
     @Autowired
     Environment env;  // 该接口保存者所有当前 IOC 容器的配置项，比如 profile 和 properties 配置文件
 
-    // @Bean 注解默认使用方法名作为 IOC 容器中的 Bean ID
+    /** @Bean
+     * 1. 该注解默认使用方法名作为 IOC 容器中的 Bean ID
+     * 2. 用该注解标记的方法，方法参数会自动从 IOC 容器中获取，并注入
+     * */
     @Bean(name = {"initialBean", "javaBaseBean"}, initMethod = "", destroyMethod = "")
     @Scope("prototype")
     @Description("Provides a basic example of a bean")
