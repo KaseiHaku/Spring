@@ -27,7 +27,7 @@ public class B03ServiceImpl implements B03Service {
 			rollbackFor={RepositoryException.class},  // 配置对指定的异常进行回滚
 			readOnly=false,				// 配置说明这个事务里面只有对数据库读的操作
 			timeout=3) 					// 配置该事务3秒后，强制回滚
-	/* Propagation.REQUIRED 表示：如果本事务作为别的事务的内层事务时，任然是自己独立一个事务，
+	/* Propagation.REQUIRES_NEW 表示：如果本事务作为别的事务的内层事务时，任然是自己独立一个事务，
 	 * 			外层事务执行到这个事务时先挂起，知道这个事务执行完毕后再执行
 	 * */
 	public void purchaseBB() {
