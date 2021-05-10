@@ -38,4 +38,35 @@ public class SpringTests {
         Color red = converter.convert("RED");
         System.out.println(red.getCurrentVal());
     }
+    
+    
+    @Test
+    void test1(){
+        /* Environment */
+        MockEnvironment mockEnv = null;
+        MockPropertySource mockPropSource = null;
+        
+        /* JNDI */
+        
+        
+        /* Servlet API */
+        EasyMock a = null;
+        MockObjects a = null;
+        
+        /* Spring Web Reactive */
+        MockServerHttpRequest a = null;
+        MockServerHttpResponse a = null;
+        
+        /* Unit Test Support Classes */
+        ReflectionTestUtils a = null;
+        AopTestUtils a = null;
+        
+        
+        /* Spring MVC Testing Utilities */
+        ModelAndViewAssert a = null;
+        MockHttpServletRequest a;
+        MockHttpSession a;
+    
+    }
+    
 }
