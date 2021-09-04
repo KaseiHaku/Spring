@@ -1,21 +1,41 @@
+AOP 编程概念:
+    Aspect: 切面: 一堆方法的集合
+    Advice: 通知: 就是切面要执行的代码
+        通知类型: Before, After returning, After throwing, After (finally), Around
+    Pointcut: 切点: 一个表达式，用于匹配所有符合表达式的方法，所有符合的方法组成一个 Aspect
+    Introduction: 引入: 假设一个 UserService 原本没有 implements Verify 接口，添加引入 Verify 接口就是在创建 UserService 代理类的使用，自动 implements Verify 接口
+    Target Object: 目标: 调用该对象的方法前需要执行 Advice，那么该对象就是 Target
+    AOP Proxy: 为了调用 Target Object 方法前后执行其他代码，需要一个代理类来替代原有对象，被调用这调用，这个代理对象一般是 动态创建的，可以使用: jdk proxy，字节码编辑 等技术
+        静态代理：直接编写代理类
+            JDK 动态代理：在运行时生成代理类，并使用代理类调用原生类
+            AspectJ:
+                第一种：在编译时直接生成代理类，
+                第二种：在类加载时使用特殊类加载器生成代理类，spring 中使用 LoadTimeWeaver 加载时织入器来指定特殊的类加载器
+    Weaving: 织入: 指将 Advice 代码整合到 Target 中的过程，
+        面向切面变成织如入代码的方式
+            编译期织入： 使用特殊的编译器
+            类加载期织入： 使用特殊的类加载器
+            运行期织入：使用 JDK 动态代理 或 CGLIB 工具
+    
+
+
+相关 类/接口/注解 解释:
+    @EnableAspectJAutoProxy: 开启 AOP 功能
+    @Aspect: 声明是一个 Aspect 类
+    @Pointcut：声明一个 切点
+    @DeclareParents: 声明一个 Introduction
+    
+    
 SpringAOP 实现原理：采用动态代理的方式实现代码的切入，由于代理的模式设计模式必须存在接口，
-		所以要使用 aop 的类必须要实现某个接口
-		
+        所以要使用 aop 的类必须要实现某个接口
+        
 aop 切入点表达式：{
-	"execution()||execution()&&execution()!execution()"
-	"execution(public int com.kasei.controller.UserController.getUser(String, int)throws IOException, SQLException)"
-	"execution(* com.kasei.controller.*.get*(..))"
-	"execution(* com.kasei.controller..*.*(..))" // 包含子包的写法
+    "execution()||execution()&&execution()!execution()"
+    "execution(public int com.kasei.controller.UserController.getUser(String, int)throws IOException, SQLException)"
+    "execution(* com.kasei.controller.*.get*(..))"
+    "execution(* com.kasei.controller..*.*(..))" // 包含子包的写法
 }
 
 
-面向切面变成织如入代码的方式
-    编译期织入： 使用特殊的编译器
-    类加载期织入： 使用特殊的类加载器
-    运行期织入：使用 JDK 动态代理 或 CGLIB 工具
 
-静态代理：直接编写代理类
-JDK 动态代理：在运行时生成代理类，并使用代理类调用原生类
-AspectJ:
-    第一种：在编译时直接生成代理类，
-    第二种：在类加载时使用特殊类加载器生成代理类，spring 中使用 LoadTimeWeaver 加载时织入器来指定特殊的类加载器
+
