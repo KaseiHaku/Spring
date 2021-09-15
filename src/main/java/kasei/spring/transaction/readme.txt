@@ -50,8 +50,22 @@ Spring Transaction Manager 相关 接口、类说明:
         Caller          AOP Proxy           Transaction Advisor             Custom Advisors             TargetMethod
            |----- call ------>|-------- call ------->| --------- call -------->|------------- call ---------->|
                               
-        
     特性：
         unchecked 异常自动回滚
+    
+    使用方式：
+        定义一个 FooService 接口 和其实现类  DefaultFooService，并将 DefaultFooService 加入 IOC 容器中，bean 名为 fooService
+        在 IOC 容器中创建一个 TransactionManager 类型的 bean 名为 txManager
+        配置一个 切点表达式(pointcut)
+        IOC 容器中配置一个 事务通知(transaction advice)，bean 名为 txAdvice
+        配置一个 advisor 将 pointcut 和 txAdvice 绑定在一起
+         
+ Programmatic Transaction Management:
+    相关类：
+        TransactionTemplate: impreative
+        TransactionalOperator: reactive
+        TransactionManager: 事务管理器 根接口
+        
+        
     
     
