@@ -29,6 +29,24 @@ AOP 编程概念:
 SpringAOP 实现原理：采用动态代理的方式实现代码的切入，由于代理的模式设计模式必须存在接口，
         所以要使用 aop 的类必须要实现某个接口
         
+
+Spring 支持的 Pointcut Expression: {
+    execution: 用于匹配方法执行后 {
+    }
+    within: {
+    }
+    this: {
+    }
+    target: {
+    }
+    args: {
+    }
+    @target: {}
+    @args: {}
+    @within: {}
+    @annotation: {}
+} 
+
 aop 切入点表达式：{
     "execution()||execution()&&execution()!execution()"
     "execution(public int com.kasei.controller.UserController.getUser(String, int)throws IOException, SQLException)"
