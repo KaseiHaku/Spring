@@ -31,20 +31,48 @@ SpringAOP 实现原理：采用动态代理的方式实现代码的切入，由�
         
 
 Spring 支持的 Pointcut Expression: {
+
+    表达式格式：
+        ModifiersPattern = [ ! ] JavaModifier
+        IdPattern = 一个字符串，包含 * 和 .. 通配符         # * 不匹配 "." 号
+        TypePattern = IdPattern [ + ] [ [] ... ]            # + 表示包含 子类
+                        | ! TypePattern
+                        | TypePattern && TypePattern
+                        | TypePattern || TypePattern
+                        | ( TypePattern )  
+        ThrowsPattern = [ ! ] TypePattern , ...
+        FieldPattern = [ModifiersPattern] TypePattern [TypePattern . ] IdPattern
+        ConstructorPattern = [ModifiersPattern ] [TypePattern . ] new (TypePattern | ".." , ...) [ throws ThrowsPattern ]
+        MethodPattern = [ModifiersPattern] TypePattern [TypePattern . ] IdPattern (TypePattern | ".." , ... ) [ throws ThrowsPattern ]
+        
+        支持组合: !, &&, ||, ()
+
     execution: 用于匹配方法执行后 {
     }
-    within: {
+    within(TypePattern): {
+        # 匹配所有符合 TypePattern 的类
     }
-    this: {
+    this(TypePattern or IdPattern): {
+        # 切入当前 this 对象是指定类型的
     }
-    target: {
+    target(TypePattern or IdPattern): {
+        # 切入目标类型为指定类型的类
     }
-    args: {
+    args(TypePattern or IdPattern, ...): {
+        # 匹配切入方法的参数类型为 指定类型
     }
-    @target: {}
-    @args: {}
-    @within: {}
-    @annotation: {}
+    @target: {
+        # target 被指定的注解注释
+    }
+    @args: {
+        # 参数被指定的注解注释
+    }
+    @within: {
+        # 匹配的类被 指定的 注解注释
+    }
+    @annotation: {
+        # 连接点被指定注解注释
+    }
 } 
 
 aop 切入点表达式：{
