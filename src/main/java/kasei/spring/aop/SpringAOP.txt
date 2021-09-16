@@ -45,8 +45,9 @@ Spring 支持的 Pointcut Expression: {
         ConstructorPattern = [ModifiersPattern ] [TypePattern . ] new (TypePattern | ".." , ...) [ throws ThrowsPattern ]
         MethodPattern = [ModifiersPattern] TypePattern [TypePattern . ] IdPattern (TypePattern | ".." , ... ) [ throws ThrowsPattern ]
         
-        支持组合: !, &&, ||, ()
-
+        支持组合: !, &&, ||, ();  由于这些符号在 xml 中不好写，所以 Spring 支持：not, and, or; 来替换
+        
+        
     execution: 用于匹配方法执行后 {
     }
     within(TypePattern): {
