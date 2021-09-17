@@ -53,12 +53,29 @@ Spring Transaction Manager 相关 接口、类说明:
     特性：
         unchecked 异常自动回滚
     
-    使用方式：
-        定义一个 FooService 接口 和其实现类  DefaultFooService，并将 DefaultFooService 加入 IOC 容器中，bean 名为 fooService
-        在 IOC 容器中创建一个 TransactionManager 类型的 bean 名为 txManager
-        配置一个 切点表达式(pointcut)
-        IOC 容器中配置一个 事务通知(transaction advice)，bean 名为 txAdvice
-        配置一个 advisor 将 pointcut 和 txAdvice 绑定在一起
+    使用步骤：
+        1. 配置 事务目标 txTarget
+            定义一个 FooService 接口 和其实现类  DefaultFooService，并将 DefaultFooService 加入 IOC 容器中，bean 名为 fooService
+            
+        2. 配置 事务管理器 txManager
+            在 IOC 容器中创建一个 TransactionManager 类型的 bean 名为 txManager
+            
+        3. 配置 事务切面 txAspect
+            注解配置：
+            XML 配置: 因为 Aspect 仅仅是 Pointcut 和 Advice 的容器，XML 中可以直接写 <aop:pointcut> <aop:before> 来配置 txPointcut 和 txAdvice 所以这里不需要配置
+            
+        4. 配置 事务切点 txPointcut 
+            注解配置：@Transactional 所在的方法就是一个 Pointcut
+            XML 配置: <aop:pointcut> 
+            
+        5. 配置 事务通知 txAdvice
+            注解配置：通过 @Transactional() 中的属性，来配置 事务通知，事务通知(txAdvice) 的代码不用自己写 
+            XML 配置: 通过 <tx:advice> 标签配置一个 事务通知，事务通知 的代码不用自己写
+            
+        6. 绑定 txPointcut 和 txAdvice
+            注解配置：因为 @Transactional 同时具有 txPointcut 和 txAdvice，直接就绑定了，所以不需要额外配置
+            XML 配置：配置一个 <aop:config>.<aop:advisor> 将 pointcut 和 txAdvice 绑定在一起 
+        
          
  Programmatic Transaction Management:
     相关类：
