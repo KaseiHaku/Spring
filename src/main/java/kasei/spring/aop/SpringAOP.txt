@@ -24,6 +24,7 @@ AOP 编程概念:
     @Aspect: 声明是一个 Aspect 类
     @Pointcut：声明一个 切点
     @DeclareParents: 声明一个 Introduction
+    @Before: 声明一个 Advice
     
     
 SpringAOP 实现原理：采用动态代理的方式实现代码的切入，由于代理的模式设计模式必须存在接口，
