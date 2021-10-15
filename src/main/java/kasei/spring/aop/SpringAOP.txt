@@ -49,19 +49,19 @@ Spring 支持的 Pointcut Expression: {
         支持组合: !, &&, ||, ();  由于这些符号在 xml 中不好写，所以 Spring 支持：not, and, or; 来替换
         
         
-    execution(Pattern)  {
-        # 用于匹配符合 Pattern 的所有方法
+    execution(Signature)  {
+        # 用于匹配符合 Signature 的所有方法
     }
     within(TypePattern): {
         # 匹配所有符合 TypePattern 的类及其子类中的所有方法
     }
-    this(TypePattern or IdPattern): {
-        # 匹配所有可以向上转型为 符合 Pattern 类型的 代理对象 中的方法
+    this(Type or Id): {     # Id 是全类名的意思
+        # 匹配所有可以向上转型为 符合 Type 类型的 代理对象 中的方法
     }
-    target(TypePattern or IdPattern): {
-        # 匹配所有可以向上转型为 符合 Pattern 类型的 目标对象 中的方法
+    target(Type or Id): {
+        # 匹配所有可以向上转型为 符合 Type 类型的 目标对象 中的方法
     }
-    args(TypePattern or IdPattern, ...): {
+    args(Type or Id or "..", ...): {
         # 匹配 参数列表 为 匹配参数列表 的方法
     }
     @target: {
