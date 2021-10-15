@@ -76,6 +76,9 @@ Spring 支持的 Pointcut Expression: {
     @annotation: {
         # 匹配被 指定注解注释的 所有方法
     }
+    bean(idOrNameOfBean): {
+        # Spring 额外支持的表达式，用于匹配容器中 指定的 BeanName
+    }
 } 
 
 aop 切入点表达式：{
