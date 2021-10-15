@@ -51,28 +51,48 @@ Spring 支持的 Pointcut Expression: {
         
     execution(Signature)  {
         # 用于匹配符合 Signature 的所有方法
+        
+        execution(* com.xyz.service.AccountService.*(..))       # 拦截AccountService(类、接口)中定义的所有方法
     }
     within(TypePattern): {
         # 匹配所有符合 TypePattern 的类及其子类中的所有方法
+        within(com.xyz.service..*)      # 拦截service包及子包中任意类的任意方法
     }
     this(Type or Id): {     # Id 是全类名的意思
         # 匹配所有可以向上转型为 符合 Type 类型的 代理对象 中的方法
+        
+        this(com.ms.aop.jthis.demo1.ServiceImpl)        # 代理对象是 ServiceImpl 类型才会被拦截，
+                                                        # 注意 ServiceImpl 是实现类，实现 Service 接口
+                                                        # 如果使用 JDK Proxy ，那么 ServiceImpl 中的方法不会被拦截，
+                                                        # 因为 JDK Proxy 生成的代理对象 不是 ServiceImpl 类型，而是 Service 类型
+                                                        # 如果使用 cglib 类生成代理对象，那么 ServiceImpl 中的方法就会被拦截，
+                                                        # 因为 cglib 是使用 继承的方式生成代理对象的，所以代理对象是 ServiceImpl 类型
     }
     target(Type or Id): {
         # 匹配所有可以向上转型为 符合 Type 类型的 目标对象 中的方法
+        
+        this(com.ms.aop.jthis.demo1.Service)            # 被代理对象(目标对象)是 Service 类型就会被代理 
     }
     args(Type or Id or "..", ...): {
         # 匹配 参数列表 为 匹配参数列表 的方法
     }
     @target: {
         # 匹配 指定注解注释的 目标对象 中的所有方法
-    }
-    @args: {
-        # 匹配 参数列表 被 指定注解注释的 所有方法
+        
+        @target(com.ms.aop.jtarget.Annotation1)     # 目标对象的类上包含 Annotation1 注解，调用该目标对象的任意方法都会被拦截
     }
     @within: {
         # 匹配被 指定注解注释的 类的 所有方法
+        
+        @within(com.ms.aop.jwithin.Annotation1)         # 判断被调用的方法所属的类中是否声明了注解 Annotation1，如果有，会被拦截
     }
+    @args: {
+        # 匹配 参数列表 被 指定注解注释的 所有方法
+        # 注意：是方法参数所属的类型上有指定的注解，不是方法参数中有注解
+        
+        @args(com.ms.aop.jargs.demo1.Anno1)         # 匹配 1 个参数，且第 1 个参数所属的类上有 Anno1 注解
+    }
+    
     @annotation: {
         # 匹配被 指定注解注释的 所有方法
     }
