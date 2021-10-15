@@ -39,8 +39,11 @@ public class LoggingAspect {
 	public void myJoinPointExpression(){}
 	
 	
-	//后置通知：在目标方法执行后（无论是否发生异常），执行通知
-	//在后置通知中不能访问目标方法的执行结果	
+	/**
+	 * 后置通知：在目标方法执行后（无论是否发生异常），执行通知
+	 * 在后置通知中不能访问目标方法的执行结果
+	 * 如果 @After("val") val 的值不符合 切点表达式，那么 val 所指定的方法必须被 @Pointcut 注解注释
+	 * */
 	@After("kasei.spring.aop.aspect.LoggingAspect.myJoinPointExpression()") // 使用切入点表达式
 	public void afterMethod(JoinPoint joinPoint) {		
 		String methodName = joinPoint.getSignature().getName();		
