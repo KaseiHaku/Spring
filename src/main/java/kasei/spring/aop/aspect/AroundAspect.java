@@ -10,7 +10,11 @@ import org.springframework.stereotype.Component;
 
 @Order(2)//指定切面的优先级，值越小优先级越高
 @Aspect
-@Component
+/** 
+ * @Component 注解不能和 @Aspect 同时使用，Spring 会自动将 @Aspect 放入 IOC 容器，
+ * 再次添加 @Component 会导致放入两次，CGLIB 代理的话，会导致切面切的实例不是想要的实例 
+ * */
+// @Component
 public class AroundAspect {
 	
 	/* 环绕通知需要携带 ProceedingJoinPoin 类型的参数
