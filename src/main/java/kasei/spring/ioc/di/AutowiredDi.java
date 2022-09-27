@@ -7,6 +7,16 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
+/**
+ * Spring DI 方式:
+ *      基于构造函数注入:
+ *          基要求具有唯一的 构造函数 或者 静态工厂方法
+ *      基于 setter 方法注入:
+ *          要求具有 setter 方法
+ *      基于 field 字段反射注入: @Deprecated 
+ *          在字段上使用 @Autowired 注解
+ *          
+ * */
 @Component
 public class AutowiredDi {
     private String name = "QualifierDi";
