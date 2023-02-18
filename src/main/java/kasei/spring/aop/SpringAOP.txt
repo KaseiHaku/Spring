@@ -55,6 +55,14 @@ Spring 支持的 Pointcut Expression: {
         
     execution(Signature)  {
         # 用于匹配符合 Signature 的所有方法
+        # 文档：https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#aop-pointcuts-examples
+        # 格式：execution(modifiers-pattern? ret-type-pattern declaring-type-pattern?name-pattern(param-pattern) throws-pattern?)
+        # 案例：
+        #   modifier-pattern?           @(java.lang.Deprecated || cn.javass..Secure) public final static
+        #   ret-type-pattern            java.util.Collection<@cn.javass..Secure ? extends java.util.Map>        # ? extends java.util.Map Spring AOP 不支持
+        #   declaring-type-pattern?     (cn.javass..IPointcutService+&& java.io.Serializable+).
+        #   name-pattern
+        #   总之有些地方可以用 (a && b) 的形式，具体参考文档 或 写代码测试
         
         execution(* com.xyz.service.AccountService.*(..))       # 拦截AccountService(类、接口)中定义的所有方法
     }
