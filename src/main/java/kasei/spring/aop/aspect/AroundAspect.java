@@ -24,7 +24,7 @@ public class AroundAspect {
 	 * 如果 @Around(value="val") val 的值不符合 切点表达式，那么 val 所指定的方法必须被 @Pointcut 注解注释
 	 * */
 	@Around("execution(public int kasei.spring.aop.*.*(..))")  
-	public Object aroundMethod(ProceedingJoinPoint pjd){
+	public Object aroundMethod(ProceedingJoinPoint pjd) throws Throwable {
 		Object result = null;
 		String className = pjd.getTarget().getClass().getName();
 		String methodName = pjd.getSignature().getName();
