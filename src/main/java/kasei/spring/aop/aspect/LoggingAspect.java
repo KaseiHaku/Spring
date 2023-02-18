@@ -19,11 +19,7 @@ import org.springframework.stereotype.Component;
  * */
 @Order(1)//指定切面的优先级，值越小优先级越高
 @Aspect
-/** 
- * @Component 注解不能和 @Aspect 同时使用，Spring 会自动将 @Aspect 放入 IOC 容器，
- * 再次添加 @Component 会导致放入两次，CGLIB 代理的话，会导致切面切的实例不是想要的实例 
- * */
-// @Component
+@Component  // 必须配合该注解使用，将当前类放到 IoC 容器中
 public class LoggingAspect {
 
 	@Before("execution(public int kasei.spring.aop.ObjImp.add(int, int))")
