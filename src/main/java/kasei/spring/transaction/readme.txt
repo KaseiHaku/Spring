@@ -79,7 +79,7 @@ Spring Transaction Manager 相关 接口、类说明:
          
  Programmatic Transaction Management:
     相关类：
-        TransactionTemplate: impreative
+        TransactionTemplate: imperative
         TransactionalOperator: reactive
         TransactionManager: 事务管理器 根接口
         
