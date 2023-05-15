@@ -58,7 +58,7 @@ Spring Transaction Manager 相关 接口、类说明:
             定义一个 FooService 接口 和其实现类  DefaultFooService，并将 DefaultFooService 加入 IOC 容器中，bean 名为 fooService
             
         2. 配置 事务管理器 txManager
-            在 IOC 容器中创建一个 TransactionManager 类型的 bean 名为 txManager
+            在 IOC 容器中创建一个 TransactionManager 类型的 bean 名为 txManager，默认 bean 名为 transactionManager
             
         3. 配置 事务切面 txAspect
             注解配置：
