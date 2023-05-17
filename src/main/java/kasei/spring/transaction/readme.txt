@@ -38,8 +38,17 @@ Spring Transaction Manager 相关 接口、类说明:
         Read-only status: 只读状态：
     TransactionInterceptor: 事务拦截器，在方法调用时，管理事务
     
-    @Transactional: 放在方法上面，表示该方法开启事务
-    @EnableTransactionManagement: 开启 spring 事务管理器
+    @Transactional: 
+        放在方法上面，表示该方法开启事务
+        @trap 该方法只能是 public 类型的
+        @trap 最好直接打到具体的类上，不要打到 interface 中，打到 interface 中，只会在基于接口的代理中有效
+              因为 java 的注解无法通过 interface 继承，所以当使用 proxy-target-class="true" 和 mode="aspectj" 时，会导致事务失效
+        @trap 同 bean 内，调用 @Transactional 方法，不会触发事务
+        @trap 在 @PostConstruct 方法上使用，也不会触发事务
+        
+    @EnableTransactionManagement <tx:annotation-driven/>: 开启 spring 事务管理器
+        @trap 只会搜索在同一 ApplicationContext 下具有  @Transactional 的 bean，
+              所以，如果把放到了 WebApplicationContext 中，那么只会搜索 Controller 中带有  @Transactional 的 bean，从而导致 service 层的事务失效
     
  Declarative Transaction Management:
     实现原理：
