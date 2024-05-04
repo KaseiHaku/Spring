@@ -1,6 +1,6 @@
 Docs:
-    https://www.eclipse.org/aspectj/doc/released/progguide/index.html       # AspectJ 官网
-    https://www.eclipse.org/aspectj/doc/released/progguide/semantics-pointcuts.html     # Pointcut 语法
+    https://eclipse.dev/aspectj/doc/released/progguide/index.html       # AspectJ 官网
+    https://eclipse.dev/aspectj/doc/released/progguide/semantics-pointcuts.html#pointcut-definition     # Pointcut 语法
 
 AOP 编程概念:
     Aspect: 切面: 一堆方法的集合
