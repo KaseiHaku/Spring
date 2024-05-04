@@ -75,7 +75,7 @@ Spring 支持的 Pointcut Expression: {
     this(Type or Id): {     # Id 是全类名的意思
         # 匹配所有可以向上转型为 符合 Type 类型的 代理对象 中的方法
         
-        this(com.ms.aop.jthis.demo1.ServiceImpl)        # 代理对象是 ServiceImpl 类型才会被拦截，
+        this(com.ms.aop.jthis.demo1.ServiceImpl)        # 代理对象(AOP Proxy)是 ServiceImpl 类型才会被拦截，
                                                         # 注意 ServiceImpl 是实现类，实现 Service 接口
                                                         # 如果使用 JDK Proxy ，那么 ServiceImpl 中的方法不会被拦截，
                                                         # 因为 JDK Proxy 生成的代理对象 不是 ServiceImpl 类型，而是 Service 类型
